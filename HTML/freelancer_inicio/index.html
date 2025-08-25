@@ -1,12 +1,1321 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrimerProyectoJC</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Diego Burgers// ...existing code...
+${item.variants.map(variant => `
+  <div class="variant-option mr-2 mb-2 px-3 py-1 border rounded-full cursor-pointer text-sm ${variant.name === 'Simple' ? 'bg-red-500 text-white' : ''}" 
+       data-variant="${variant.name}" 
+       data-price="${variant.price}">
+    ${variant.name} $${variant.price.toLocaleString('es-AR')}
+  </div>
+`).join('')}
+// ...existing code...// ...dentro de la función loadMenuItems...
+${item.variants.map(variant => `
+  <div class="variant-option mr-2 mb-2 px-3 py-1 border rounded-full cursor-pointer text-sm ${variant.name === 'Simple' ? 'bg-red-500 text-white' : ''}" 
+       data-variant="${variant.name}" 
+       data-price="${variant.price}">
+    ${variant.name} $${variant.price.toLocaleString('es-AR')}
+  </div>
+`).join('')}
+// ...resto del código... - Menú Digital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style id="app-style">
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --text-color: #2d3436;
+      --bg-color: #f9f9f9;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+    
+    body.dark-mode {
+      --bg-color: #2d3436;
+      --text-color: #f9f9f9;
+      --card-bg: #393e46;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header {
+      background-color: var(--card-bg);
+      box-shadow: var(--card-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    
+    .category-tabs {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      white-space: nowrap;
+    }
+    
+    .category-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .tab {
+      display: inline-block;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      border-bottom: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    .menu-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .menu-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .menu-img {
+      height: 160px;
+      object-fit: cover;
+      width: 100%;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .quantity-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .quantity-input {
+      width: 40px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      font-weight: 600;
+    }
+    
+    .cart-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      cursor: pointer;
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--secondary-color);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .cart-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--card-bg);
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-out;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .cart-panel.open {
+      transform: translateY(0);
+    }
+    
+    .cart-item {
+      display: flex;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .empty-cart-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
+    
+    .cart-overlay.show {
+      display: block;
+    }
+    
+    .checkout-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      padding: 24px;
+      z-index: 2000;
+      display: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .checkout-modal.open {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    
+    .order-type-toggle {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    
+    .order-type-option {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .order-type-option.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .confirmation-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-color);
+      z-index: 3000;
+      display: none;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .confirmation-screen.show {
+      display: block;
+    }
+    
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-color);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Loading animation for menu items */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+    }
+    
+    @keyframes loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+    
+    .skeleton-img {
+      height: 160px;
+      width: 100%;
+    }
+    
+    .skeleton-text {
+      height: 20px;
+      margin: 8px 0;
+    }
+    
+    .skeleton-text.short {
+      width: 60%;
+    }
+    
+    .skeleton-text.medium {
+      width: 80%;
+    }
+    
+    .skeleton-button {
+      height: 40px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .item-observation {
+      min-height: 50px;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    .item-observation:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+      outline: none;
+    }
+
+    .variant-option {
+      min-width: 110px; /* Puedes ajustar el valor */
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <h1>hola mundo</h1>
-    <p>que onda</p>
+  <!-- Header with Logo and Dark Mode Toggle -->
+  <header class="header py-4 px-4">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center">
+        <div class="text-2xl font-bold" style="color: var(--primary-color);">
+          El Diego Burgers
+        </div>
+      </div>
+      <button id="dark-mode-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Category Tabs -->
+  <div class="category-tabs bg-white dark:bg-gray-800 py-2 px-2 shadow-sm mb-4">
+    <div class="tab active" data-category="burgers">Hamburguesas</div>
+    <div class="tab" data-category="sandwiches">Sandwiches</div>
+    <div class="tab" data-category="nuggets">Nuggets de Pollo</div>
+    <div class="tab" data-category="fries">Papas Fritas</div>
+    <div class="tab" data-category="beverages">Bebidas</div>
+    <div class="tab" data-category="picadas">Picadas</div>
+  </div>
+
+  <!-- Menu Items Container -->
+  <div class="container mx-auto px-4 pb-24">
+    <div id="menu-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Menu items will be loaded here -->
+      <!-- Skeleton loading -->
+      <div class="skeleton-card menu-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-4">
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text medium"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </div>
+      <div class="skeleton-card menu-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-4">
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text medium"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </div>
+      <div class="skeleton-card menu-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-4">
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text medium"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Button -->
+  <div class="cart-btn" id="cart-button">
+    <i class="fas fa-shopping-cart text-white text-2xl"></i>
+    <span class="cart-count">0</span>
+  </div>
+
+  <!-- Cart Panel -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-panel" id="cart-panel">
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-bold">Tu Pedido</h2>
+        <button id="close-cart" class="p-2">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div id="cart-items" class="divide-y divide-gray-200">
+      <!-- Cart items will appear here -->
+      <div class="empty-cart-message">
+        <i class="fas fa-shopping-basket text-4xl mb-4 text-gray-400"></i>
+        <p class="text-gray-500">Tu carrito está vacío</p>
+        <p class="text-sm text-gray-400 mt-2">Agrega algunos productos del menú</p>
+      </div>
+    </div>
+    <div class="p-4 border-t border-gray-200">
+      <div class="flex justify-between mb-4">
+        <span class="font-semibold">Total:</span>
+        <span class="font-bold" id="cart-total">€0.00</span>
+      </div>
+      <button id="checkout-button" class="w-full py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors" disabled>
+        Realizar Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkout-modal">
+    <h2 class="text-xl font-bold mb-4">Finalizar Pedido</h2>
+    <form id="checkout-form">
+      <div class="order-type-toggle">
+        <div class="order-type-option active" data-type="pickup">Pickup</div>
+        <div class="order-type-option" data-type="delivery">Delivery</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="name">Nombre</label>
+        <input type="text" id="name" class="form-input" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="phone">Teléfono</label>
+        <input type="tel" id="phone" class="form-input" required>
+      </div>
+      
+      <div id="dine-in-fields">
+        <div class="form-group">
+          <label class="form-label" for="table-number">Número de Mesa</label>
+          <input type="number" id="table-number" class="form-input" min="1">
+        </div>
+      </div>
+      
+      <div id="delivery-fields" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="address">Dirección</label>
+          <textarea id="address" class="form-input" rows="3"></textarea>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="notes">Notas adicionales</label>
+        <textarea id="notes" class="form-input" rows="2" placeholder="Alergias, preferencias, etc."></textarea>
+      </div>
+      
+      <div class="flex justify-between mt-6">
+        <button type="button" id="cancel-checkout" class="px-4 py-2 border border-gray-300 rounded-lg">
+          Cancelar
+        </button>
+        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg">
+          Confirmar Pedido
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Order Confirmation Screen -->
+  <div class="confirmation-screen" id="confirmation-screen">
+    <div class="max-w-md mx-auto pt-10">
+      <div class="text-center mb-6">
+        <i class="fas fa-check-circle text-green-500 text-6xl"></i>
+        <h2 class="text-2xl font-bold mt-4">¡Pedido Confirmado!</h2>
+        <p class="text-gray-500 mt-2">Tu pedido ha sido recibido y está en preparación</p>
+      </div>
+      
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <h3 class="font-bold text-lg mb-2">Resumen del Pedido</h3>
+        <div id="confirmation-items" class="divide-y divide-gray-200 mb-4">
+          <!-- Order items will be listed here -->
+        </div>
+        <div class="flex justify-between font-bold">
+          <span>Total:</span>
+          <span id="confirmation-total">€0.00</span>
+        </div>
+      </div>
+      
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <h3 class="font-bold text-lg mb-2">Detalles</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="text-gray-500">Nombre:</div>
+          <div id="conf-name"></div>
+          
+          <div class="text-gray-500">Teléfono:</div>
+          <div id="conf-phone"></div>
+          
+          <div class="text-gray-500" id="conf-location-type">Mesa:</div>
+          <div id="conf-location"></div>
+          
+          <div class="text-gray-500">Tiempo estimado:</div>
+          <div>20-30 minutos</div>
+        </div>
+      </div>
+      
+      <button id="back-to-menu" class="w-full py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors">
+        Volver al Menú
+      </button>
+    </div>
+  </div>
+
+  <script id="app-script">
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize state
+      let cart = [];
+      let currentCategory = 'burgers';
+      const orderTypeState = { type: 'pickup' };
+      
+      // Menu data
+      const menuData = {
+  burgers: [
+    {
+      id: 'b1',
+      name: 'CHEDDAR',
+      description: 'Medallón 120grs de carne, queso cheddar, panceta ahumada, cebollita caramelizada. Acompañada con papas fritas.',
+      variants: [
+        { name: 'Simple', price: 7000 },
+        { name: 'Doble', price: 9000 },
+        { name: 'Triple', price: 10500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2020/03/21/11/17/burger-4953465_1280.jpg'
+    },
+    {
+      id: 'b2',
+      name: 'CRISPY BOOM',
+      description: 'Medallón 120grs de carne, queso cheddar, panceta ahumada, cebollita crispy, salsa boom casera. Acompañada con papas fritas.',
+      variants: [
+        { name: 'Simple', price: 7000 },
+        { name: 'Doble', price: 9000 },
+        { name: 'Triple', price: 10500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2022/08/31/10/13/burger-7422970_1280.jpg'
+    },
+    {
+      id: 'b3',
+      name: 'CLÁSICAS',
+      description: 'Medallón 120grs de carne, jamón y queso, lechuga, tomate. Acompañadas con papas fritas.',
+      variants: [
+        { name: 'Simple', price: 7000 },
+        { name: 'Doble', price: 9000 },
+        { name: 'Triple', price: 10500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_1280.jpg'
+    },
+    {
+      id: 'b4',
+      name: 'LA DIEGO FAVORITA',
+      description: 'Medallón 120grs de carne, queso tybo, lechuga, tomate, cebolla encurtida, panceta ahumada, salsa EL DIEGO. Acompañadas con papas fritas.',
+      variants: [
+        { name: 'Simple', price: 8000 },
+        { name: 'Doble', price: 9500 },
+        { name: 'Triple', price: 11500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2019/01/16/17/48/burger-3936525_1280.jpg'
+    },
+    {
+      id: 'b5',
+      name: 'BAÑADAS EN CHEDDAR',
+      description: 'Medallón 120grs de carne, jamón y queso, queso cheddar fundido y lluvia de panceta ahumada. Acompañado con papas fritas.',
+      variants: [
+        { name: 'Simple', price: 8000 },
+        { name: 'Doble', price: 9500 },
+        { name: 'Triple', price: 11500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2018/03/04/20/10/burger-3199088_1280.jpg'
+    },
+    {
+      id: 'b6',
+      name: 'LA EXPLOSIVA DEL DIEGO',
+      description: 'Medallón 120grs de carne, queso cheddar fundido, cebolla caramelizada, panceta ahumada, mayonesa EL DIEGO. Acompañado con papas fritas.',
+      variants: [
+        { name: 'Simple', price: 7000 },
+        { name: 'Doble', price: 9000 },
+        { name: 'Triple', price: 10500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2022/01/03/00/14/burger-6911570_1280.jpg'
+    }
+  ],
+  sandwiches: [
+    {
+      id: 's1',
+      name: 'MILANESA',
+      description: 'Milanesa 300grs, jamón y queso, huevo, lechuga, tomate, acompañado con papas fritas.',
+      price: 10500,
+      image: 'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+    },
+    {
+      id: 's2',
+      name: 'LOMITO',
+      description: 'Lomo 300grs, jamón y queso, huevo, lechuga, tomate, acompañado con papas fritas.',
+      price: 11500,
+      image: 'https://cdn.pixabay.com/photo/2016/03/05/22/31/appetite-1239057_1280.jpg'
+    }
+  ],
+  fries: [
+    {
+      id: 'f1',
+      name: 'COMUNES',
+      description: 'Bandeja de papas fritas, aderezos a elección.',
+      price: 6500,
+      image: 'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+    },
+    {
+      id: 'f2',
+      name: 'CHEDDAR',
+      description: 'Bandeja de papas fritas, cheddar fundido, cebolla de verdeo y lluvia de panceta.',
+      price: 7000,
+      image: 'https://cdn.pixabay.com/photo/2021/03/04/08/36/croquettes-6067090_1280.jpg'
+    }
+  ],
+  nuggets: [
+    {
+      id: 'n1',
+      name: 'COMBO KIDS MINI',
+      description: '5 nuggets de pollo. Acompañados con papas fritas.',
+      price: 4000,
+      image: 'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+    },
+    {
+      id: 'n2',
+      name: 'COMBO KIDS GRANDE',
+      description: '10 nuggets de pollo. Acompañados con papas fritas.',
+      price: 6000,
+      image: 'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+    }
+  ],
+  beverages: {
+    sinAlcohol: [
+      {
+        id: 'ba1',
+        name: 'AGUA MINERAL',
+        description: 'Pepsi, Seven Up, Mirinda Manzana',
+        price: 4000,
+        image: 'https://cdn.pixabay.com/photo/2017/06/02/18/24/cola-2360834_1280.jpg'
+      },
+      {
+        id: 'ba2',
+        name: 'MIRINDA MANZANA',
+        description: 'Pepsi, Seven Up, Mirinda Manzana',
+        price: 3500,
+        image: 'https://cdn.pixabay.com/photo/2017/06/02/18/24/cola-2360834_1280.jpg'
+      },
+      {
+        id: 'ba3',
+        name: 'PEPSI',
+        description: 'Pepsi, Seven Up, Mirinda Manzana',
+        price: 2000,
+        image: 'https://cdn.pixabay.com/photo/2017/06/02/18/24/cola-2360834_1280.jpg'
+      },
+      {
+        id: 'ba4',
+        name: 'SEVEN UP',
+        description: '',
+        price: 2000,
+        image: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/water-1238246_1280.jpg'
+      }
+      
+    ],
+    conAlcohol: [
+      {
+        id: 'al1',
+        name: 'Cerveza Quilmes 1L',
+        description: 'Cerveza rubia tradicional argentina.',
+        price: 3500,
+        image: 'https://cdn.pixabay.com/photo/2016/03/27/21/36/beer-1283566_1280.jpg'
+      },
+      {
+        id: 'al2',
+        name: 'Fernet con Coca',
+        description: 'Trago clásico argentino, fernet con gaseosa cola.',
+        price: 4000,
+        image: 'https://cdn.pixabay.com/photo/2017/07/28/14/28/drink-2549494_1280.jpg'
+      },
+      {
+        id: 'al3',
+        name: 'Vino Tinto 750ml',
+        description: 'Vino tinto argentino, botella 750ml.',
+        price: 4500,
+        image: 'https://cdn.pixabay.com/photo/2016/11/29/09/32/alcohol-1869656_1280.jpg'
+      }
+    ]
+  },
+  picadas: []
+};
+
+      // Elements
+      const menuContainer = document.getElementById('menu-container');
+      const categoryTabs = document.querySelectorAll('.tab');
+      const cartButton = document.getElementById('cart-button');
+      const cartPanel = document.getElementById('cart-panel');
+      const cartOverlay = document.getElementById('cart-overlay');
+      const closeCartButton = document.getElementById('close-cart');
+      const cartItemsContainer = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      const checkoutButton = document.getElementById('checkout-button');
+      const checkoutModal = document.getElementById('checkout-modal');
+      const cancelCheckoutButton = document.getElementById('cancel-checkout');
+      const checkoutForm = document.getElementById('checkout-form');
+      const orderTypeOptions = document.querySelectorAll('.order-type-option');
+      const dineInFields = document.getElementById('dine-in-fields');
+      const deliveryFields = document.getElementById('delivery-fields');
+      const confirmationScreen = document.getElementById('confirmation-screen');
+      const confirmationItems = document.getElementById('confirmation-items');
+      const confirmationTotal = document.getElementById('confirmation-total');
+      const confName = document.getElementById('conf-name');
+      const confPhone = document.getElementById('conf-phone');
+      const confLocationType = document.getElementById('conf-location-type');
+      const confLocation = document.getElementById('conf-location');
+      const backToMenuButton = document.getElementById('back-to-menu');
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      const cartCountBadge = document.querySelector('.cart-count');
+      
+      // Load menu items
+      function loadMenuItems(category) {
+        // Limpia el contenedor antes de mostrar los productos
+        menuContainer.innerHTML = '';
+
+        setTimeout(() => {
+          let items = menuData[category];
+
+          // Si la categoría es bebidas, mostrar subcategorías
+          if (category === 'beverages') {
+            // Bebidas sin alcohol
+            if (items.sinAlcohol && items.sinAlcohol.length > 0) {
+              const subTitle = document.createElement('h2');
+              subTitle.className = 'col-span-full text-xl font-bold mb-2 text-center';
+              subTitle.textContent = 'Bebidas sin Alcohol';
+              menuContainer.appendChild(subTitle);
+
+              items.sinAlcohol.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'menu-card slide-in';
+                itemCard.innerHTML = `
+                  <img src="${item.image}" alt="${item.name}" class="menu-img">
+                  <div class="p-4">
+                    <h3 class="font-semibold text-lg">${item.name}</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">${item.description}</p>
+                    <textarea class="w-full mt-2 px-2 py-1 text-sm border rounded-lg text-gray-700 dark:text-gray-300 dark:bg-gray-700 item-observation" rows="2" placeholder="Añadir observaciones..." data-id="${item.id}"></textarea>
+                    <div class="flex justify-between items-center mt-3">
+                      <span class="font-bold">$${item.price.toLocaleString('es-AR', {minimumFractionDigits: 2})}</span>
+                      <div class="flex items-center">
+                        <div class="quantity-control">
+                          <div class="quantity-btn" data-action="decrease" data-id="${item.id}">-</div>
+                          <input type="number" class="quantity-input" value="1" min="1" data-id="${item.id}">
+                          <div class="quantity-btn" data-action="increase" data-id="${item.id}">+</div>
+                        </div>
+                        <button class="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 add-to-cart" data-id="${item.id}">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                menuContainer.appendChild(itemCard);
+              });
+            }
+
+            // Bebidas con alcohol
+            if (items.conAlcohol && items.conAlcohol.length > 0) {
+              const subTitle = document.createElement('h2');
+              subTitle.className = 'col-span-full text-xl font-bold mb-2 text-center mt-6';
+              subTitle.textContent = 'Bebidas con Alcohol';
+              menuContainer.appendChild(subTitle);
+
+              items.conAlcohol.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'menu-card slide-in';
+                itemCard.innerHTML = `
+                  <img src="${item.image}" alt="${item.name}" class="menu-img">
+                  <div class="p-4">
+                    <h3 class="font-semibold text-lg">${item.name}</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">${item.description}</p>
+                    <textarea class="w-full mt-2 px-2 py-1 text-sm border rounded-lg text-gray-700 dark:text-gray-300 dark:bg-gray-700 item-observation" rows="2" placeholder="Añadir observaciones..." data-id="${item.id}"></textarea>
+                    <div class="flex justify-between items-center mt-3">
+                      <span class="font-bold">$${item.price.toLocaleString('es-AR', {minimumFractionDigits: 2})}</span>
+                      <div class="flex items-center">
+                        <div class="quantity-control">
+                          <div class="quantity-btn" data-action="decrease" data-id="${item.id}">-</div>
+                          <input type="number" class="quantity-input" value="1" min="1" data-id="${item.id}">
+                          <div class="quantity-btn" data-action="increase" data-id="${item.id}">+</div>
+                        </div>
+                        <button class="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 add-to-cart" data-id="${item.id}">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                menuContainer.appendChild(itemCard);
+              });
+            }
+            return; // Evita mostrar productos de otras categorías
+          }
+
+          // Código original para otras categorías
+          items.forEach(item => {
+            const itemCard = document.createElement('div');
+            itemCard.className = 'menu-card slide-in';
+
+            if (item.variants) {
+              itemCard.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="menu-img">
+                <div class="p-4">
+                  <h3 class="font-semibold text-lg">${item.name}</h3>
+                  <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">${item.description}</p>
+                  <div class="mt-3 variant-selector flex flex-wrap" data-id="${item.id}">
+                    ${item.variants.map(variant => `
+                      <div class="variant-option mr-2 mb-2 px-3 py-1 border rounded-full cursor-pointer text-sm ${variant.name === 'Simple' ? 'bg-red-500 text-white' : ''}" 
+                           data-variant="${variant.name}" 
+                           data-price="${variant.price}">
+                        ${variant.name} $${(variant.price).toLocaleString('es-AR')}
+                      </div>
+                    `).join('')}
+                  </div>
+                  <textarea class="w-full mt-2 px-2 py-1 text-sm border rounded-lg text-gray-700 dark:text-gray-300 dark:bg-gray-700 item-observation" rows="2" placeholder="Añadir observaciones..." data-id="${item.id}"></textarea>
+                  <div class="flex justify-between items-center mt-3">
+                    <span class="font-bold item-price" data-id="${item.id}">$${item.variants[0].price.toLocaleString('es-AR')}</span>
+                    <div class="flex items-center">
+                      <div class="quantity-control">
+                        <div class="quantity-btn" data-action="decrease" data-id="${item.id}">-</div>
+                        <input type="number" class="quantity-input" value="1" min="1" data-id="${item.id}">
+                        <div class="quantity-btn" data-action="increase" data-id="${item.id}">+</div>
+                      </div>
+                      <button class="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 add-to-cart" data-id="${item.id}" data-variant="Simple">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            } else {
+              itemCard.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="menu-img">
+                <div class="p-4">
+                  <h3 class="font-semibold text-lg">${item.name}</h3>
+                  <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">${item.description}</p>
+                  <textarea class="w-full mt-2 px-2 py-1 text-sm border rounded-lg text-gray-700 dark:text-gray-300 dark:bg-gray-700 item-observation" rows="2" placeholder="Añadir observaciones..." data-id="${item.id}"></textarea>
+                  <div class="flex justify-between items-center mt-3">
+                    <span class="font-bold">$${item.price.toLocaleString('es-AR', {minimumFractionDigits: 2})}</span>
+                    <div class="flex items-center">
+                      <div class="quantity-control">
+                        <div class="quantity-btn" data-action="decrease" data-id="${item.id}">-</div>
+                        <input type="number" class="quantity-input" value="1" min="1" data-id="${item.id}">
+                        <div class="quantity-btn" data-action="increase" data-id="${item.id}">+</div>
+                      </div>
+                      <button class="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 add-to-cart" data-id="${item.id}">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
+
+            menuContainer.appendChild(itemCard);
+          });
+
+          // Add event listeners for variant selectors
+          const variantSelectors = document.querySelectorAll('.variant-selector');
+          variantSelectors.forEach(selector => {
+            selector.addEventListener('click', function(e) {
+              if (e.target.classList.contains('variant-option')) {
+                const options = selector.querySelectorAll('.variant-option');
+                options.forEach(opt => opt.classList.remove('bg-red-500', 'text-white'));
+
+                e.target.classList.add('bg-red-500', 'text-white');
+
+                const itemId = selector.dataset.id;
+                const variant = e.target.dataset.variant;
+                const price = e.target.dataset.price;
+
+                // Update price display
+                const priceDisplay = document.querySelector(`.item-price[data-id="${itemId}"]`);
+                if (priceDisplay) {
+                  priceDisplay.textContent = `$${parseInt(price).toLocaleString('es-AR')}`;
+                }
+
+                // Update add to cart button with selected variant
+                const addButton = document.querySelector(`.add-to-cart[data-id="${itemId}"]`);
+                if (addButton) {
+                  addButton.dataset.variant = variant;
+                }
+              }
+            });
+          });
+        }, 500);
+      }
+      
+      // Update cart count
+      function updateCartCount() {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountBadge.textContent = totalItems;
+        checkoutButton.disabled = totalItems === 0;
+        
+        // Show empty cart message if cart is empty
+        if (totalItems === 0) {
+          cartItemsContainer.innerHTML = `
+            <div class="empty-cart-message">
+              <i class="fas fa-shopping-basket text-4xl mb-4 text-gray-400"></i>
+              <p class="text-gray-500">Tu carrito está vacío</p>
+              <p class="text-sm text-gray-400 mt-2">Agrega algunos productos del menú</p>
+            </div>
+          `;
+        }
+      }
+      
+      // Render cart items
+      function renderCart() {
+        if (cart.length === 0) {
+          updateCartCount();
+          return;
+        }
+        
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach(item => {
+          const menuItem = findMenuItem(item.id, item.variant);
+          if (!menuItem) return;
+          
+          const itemTotal = menuItem.price * item.quantity;
+          total += itemTotal;
+          
+          const cartItem = document.createElement('div');
+          cartItem.className = 'cart-item';
+          cartItem.innerHTML = `
+            <div class="flex-1">
+              <h3 class="font-semibold">${menuItem.name}${item.variant ? ` (${item.variant})` : ''}</h3>
+              ${item.observation ? `<p class="text-xs text-gray-500 mt-1 italic">Nota: ${item.observation}</p>` : ''}
+              <div class="flex justify-between items-center mt-2">
+                <span class="text-sm text-gray-600 dark:text-gray-300">$${menuItem.price.toLocaleString('es-AR')}</span>
+                <div class="flex items-center">
+                  <button class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center cart-qty-btn" data-action="decrease" data-id="${item.id}" data-variant="${item.variant || ''}">
+                    <i class="fas fa-minus text-xs"></i>
+                  </button>
+                  <span class="mx-2 w-6 text-center">${item.quantity}</span>
+                  <button class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center cart-qty-btn" data-action="increase" data-id="${item.id}" data-variant="${item.variant || ''}">
+                    <i class="fas fa-plus text-xs"></i>
+                  </button>
+                  <button class="ml-3 text-gray-400 hover:text-red-500 remove-item" data-id="${item.id}" data-variant="${item.variant || ''}">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          cartItemsContainer.appendChild(cartItem);
+        });
+        
+        cartTotal.textContent = `$${total.toLocaleString('es-AR')}`;
+        updateCartCount();
+      }
+      
+      // Find menu item by ID
+      function findMenuItem(id, variant = null) {
+        for (const category in menuData) {
+          const item = menuData[category].find(item => item.id === id);
+          if (item) {
+            if (item.variants && variant) {
+              const variantData = item.variants.find(v => v.name === variant);
+              if (variantData) {
+                return {...item, price: variantData.price};
+              }
+            }
+            return item.price ? {...item, price: item.price} : {...item, price: item.variants[0].price};
+          }
+        }
+        return null;
+      }
+      
+      // Add item to cart
+      function addToCart(id, quantity) {
+        const existingItem = cart.find(item => item.id === id && item.variant === (menuContainer.querySelector(`.add-to-cart[data-id="${id}"]`).dataset.variant || null));
+        const observation = menuContainer.querySelector(`.item-observation[data-id="${id}"]`).value.trim();
+        const variant = menuContainer.querySelector(`.add-to-cart[data-id="${id}"]`).dataset.variant || null;
+        
+        if (existingItem) {
+          existingItem.quantity += quantity;
+          if (observation) {
+            existingItem.observation = observation;
+          }
+        } else {
+          cart.push({ id, quantity, observation, variant });
+        }
+        
+        saveCart();
+        renderCart();
+      }
+      
+      // Remove item from cart
+      function removeFromCart(id, variant = null) {
+        cart = cart.filter(item => !(item.id === id && (variant ? item.variant === variant : true)));
+        saveCart();
+        renderCart();
+      }
+      
+      // Update item quantity in cart
+      function updateCartItemQuantity(id, action, variant = null) {
+        const cartItem = cart.find(item => item.id === id && (variant ? item.variant === variant : true));
+        if (!cartItem) return;
+        
+        if (action === 'increase') {
+          cartItem.quantity += 1;
+        } else if (action === 'decrease') {
+          cartItem.quantity -= 1;
+          if (cartItem.quantity <= 0) {
+            removeFromCart(id, variant);
+            return;
+          }
+        }
+        
+        saveCart();
+        renderCart();
+      }
+      
+      // Save cart to localStorage
+      function saveCart() {
+        localStorage.setItem('restaurant-cart', JSON.stringify(cart));
+      }
+      
+      // Load cart from localStorage
+      function loadCart() {
+        const savedCart = localStorage.getItem('restaurant-cart');
+        if (savedCart) {
+          cart = JSON.parse(savedCart);
+          renderCart();
+        }
+      }
+      
+      // Event listeners
+      
+      // Category tab switching
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          currentCategory = this.dataset.category;
+          loadMenuItems(currentCategory);
+        });
+      });
+      
+      // Menu item quantity control
+      menuContainer.addEventListener('click', function(e) {
+        const target = e.target;
+        
+        // Add to cart button
+        if (target.classList.contains('add-to-cart') || target.closest('.add-to-cart')) {
+          const button = target.classList.contains('add-to-cart') ? target : target.closest('.add-to-cart');
+          const id = button.dataset.id;
+          const inputEl = menuContainer.querySelector(`.quantity-input[data-id="${id}"]`);
+          const quantity = parseInt(inputEl.value);
+          
+          addToCart(id, quantity);
+          
+          // Reset input value
+          inputEl.value = 1;
+          
+          // Show feedback
+          const feedback = document.createElement('div');
+          feedback.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50';
+          feedback.textContent = 'Producto añadido';
+          document.body.appendChild(feedback);
+          
+          setTimeout(() => {
+            feedback.remove();
+          }, 2000);
+        }
+        
+        // Quantity buttons
+        if (target.classList.contains('quantity-btn') || target.closest('.quantity-btn')) {
+          const button = target.classList.contains('quantity-btn') ? target : target.closest('.quantity-btn');
+          const action = button.dataset.action;
+          const id = button.dataset.id;
+          const inputEl = menuContainer.querySelector(`.quantity-input[data-id="${id}"]`);
+          let value = parseInt(inputEl.value);
+          
+          if (action === 'increase') {
+            value += 1;
+          } else if (action === 'decrease') {
+            value = Math.max(1, value - 1);
+          }
+          
+          inputEl.value = value;
+        }
+      });
+      
+      // Quantity input validation
+      menuContainer.addEventListener('change', function(e) {
+        if (e.target.classList.contains('quantity-input')) {
+          const value = parseInt(e.target.value);
+          if (isNaN(value) || value < 1) {
+            e.target.value = 1;
+          }
+        }
+      });
+      
+      // Cart panel toggle
+      cartButton.addEventListener('click', function() {
+        cartPanel.classList.add('open');
+        cartOverlay.classList.add('show');
+      });
+      
+      closeCartButton.addEventListener('click', function() {
+        cartPanel.classList.remove('open');
+        cartOverlay.classList.remove('show');
+      });
+      
+      cartOverlay.addEventListener('click', function() {
+        cartPanel.classList.remove('open');
+        cartOverlay.classList.remove('show');
+      });
+      
+      // Cart item controls
+      cartItemsContainer.addEventListener('click', function(e) {
+        // Remove item button
+        if (e.target.classList.contains('remove-item') || e.target.closest('.remove-item')) {
+          const button = e.target.classList.contains('remove-item') ? e.target : e.target.closest('.remove-item');
+          const id = button.dataset.id;
+          const variant = button.dataset.variant || null;
+          removeFromCart(id, variant);
+        }
+        
+        // Quantity buttons
+        if (e.target.classList.contains('cart-qty-btn') || e.target.closest('.cart-qty-btn')) {
+          const button = e.target.classList.contains('cart-qty-btn') ? e.target : e.target.closest('.cart-qty-btn');
+          const action = button.dataset.action;
+          const id = button.dataset.id;
+          const variant = button.dataset.variant || null;
+          updateCartItemQuantity(id, action, variant);
+        }
+      });
+      
+      // Checkout process
+      checkoutButton.addEventListener('click', function() {
+        if (cart.length > 0) {
+          checkoutModal.classList.add('open');
+          cartOverlay.classList.add('show');
+        }
+      });
+      
+      cancelCheckoutButton.addEventListener('click', function() {
+        checkoutModal.classList.remove('open');
+        cartOverlay.classList.remove('show');
+      });
+      
+      // Order type toggle
+      orderTypeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          orderTypeOptions.forEach(o => o.classList.remove('active'));
+          this.classList.add('active');
+          orderTypeState.type = this.dataset.type;
+          
+          if (orderTypeState.type === 'pickup') {
+            dineInFields.style.display = 'block';
+            deliveryFields.style.display = 'none';
+          } else {
+            dineInFields.style.display = 'none';
+            deliveryFields.style.display = 'block';
+          }
+        });
+      });
+      
+      // Form submission
+      checkoutForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        let location;
+        
+        if (orderTypeState.type === 'pickup') {
+          location = document.getElementById('table-number').value;
+          confLocationType.textContent = 'Pickup #:';
+        } else {
+          location = document.getElementById('address').value;
+          confLocationType.textContent = 'Dirección:';
+        }
+        
+        // Display confirmation screen
+        confName.textContent = name;
+        confPhone.textContent = phone;
+        confLocation.textContent = location;
+        
+        // Populate confirmation items
+        confirmationItems.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach(item => {
+          const menuItem = findMenuItem(item.id, item.variant);
+          if (!menuItem) return;
+          
+          const itemTotal = menuItem.price * item.quantity;
+          total += itemTotal;
+          
+          const listItem = document.createElement('div');
+          listItem.className = 'py-2';
+          listItem.innerHTML = `
+            <div class="flex justify-between">
+              <span>${item.quantity}x ${menuItem.name}</span>
+              <span>€${itemTotal.toFixed(2)}</span>
+            </div>
+            ${item.observation ? `<p class="text-xs text-gray-500 mt-1 italic">Nota: ${item.observation}</p>` : ''}
+          `;
+          confirmationItems.appendChild(listItem);
+        });
+        
+        confirmationTotal.textContent = `€${total.toFixed(2)}`;
+        
+        // Show confirmation screen
+        checkoutModal.classList.remove('open');
+        cartOverlay.classList.remove('show');
+        confirmationScreen.classList.add('show');
+        
+        // Clear cart
+        cart = [];
+        saveCart();
+        updateCartCount();
+      });
+      
+      // Back to menu button
+      backToMenuButton.addEventListener('click', function() {
+        confirmationScreen.classList.remove('show');
+        cartPanel.classList.remove('open');
+      });
+      
+      // Dark mode toggle
+      darkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+          darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+          localStorage.setItem('dark-mode', 'enabled');
+        } else {
+          darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+          localStorage.setItem('dark-mode', 'disabled');
+        }
+      });
+      
+      // Initialize app
+      function init() {
+        // Load saved dark mode preference
+        if (localStorage.getItem('dark-mode') === 'enabled') {
+          document.body.classList.add('dark-mode');
+          darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        // Load initial category
+        loadMenuItems(currentCategory);
+        
+        // Load saved cart
+        loadCart();
+      }
+      
+      init();
+    });
+  </script>
 </body>
 </html>
