@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Diego Burgers</title>
+  <link rel="preload" href="CSS/normalize.css" as="style">
+  <link rel="stylesheet" href="CSS/normalize.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="CSS/styles.css" as="style">
+  <link href="CSS/styles.css" rel="stylesheet">
+  <style id="app-style">
+
+    
+  </style>
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      El Diego Burgers
+    </div>
+    <button id="dark-mode-toggle" class="dark-toggle">
+      <i class="fas fa-moon"></i>
+    </button>
+  </div>
+</header>
+
+  <!-- pestaña de categorias -->
+  <div class="category-tabs ">
+    <nav class= "main-navigation container">
+      <div class="tab active" data-category="burgers">Hamburguesas</div>
+      <div class="tab" data-category="sandwiches">Sandwiches</div>
+      <div class="tab" data-category="nuggets">Nuggets de Pollo</div>
+      <div class="tab" data-category="fries">Papas Fritas</div>
+      <div class="tab" data-category="beverages">Bebidas</div>
+      <div class="tab" data-category="picadas">Picadas</div>
+    </nav>
+    
+  </div>
+
+  <!-- Menu Items Container -->
+  <div class="container mx-auto px-4 pb-24">
+    <div id="menu-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Menu items will be loaded here -->
+      <!-- Skeleton loading -->
+      <div class="skeleton-card menu-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-4">
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text medium"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </div>
+      <div class="skeleton-card menu-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-4">
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text medium"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </div>
+      <div class="skeleton-card menu-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-4">
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text medium"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Button -->
+  <div class="cart-btn" id="cart-button">
+    <i class="fas fa-shopping-cart text-white text-2xl"></i>
+    <span class="cart-count">0</span>
+  </div>
+
+  <!-- Cart Panel -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-panel" id="cart-panel">
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-bold">Tu Pedido</h2>
+        <button id="close-cart" class="p-2">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div id="cart-items" class="divide-y divide-gray-200">
+      <!-- Cart items will appear here -->
+      <div class="empty-cart-message">
+        <i class="fas fa-shopping-basket text-4xl mb-4 text-gray-400"></i>
+        <p class="text-gray-500">Tu carrito está vacío</p>
+        <p class="text-sm text-gray-400 mt-2">Agrega algunos productos del menú</p>
+      </div>
+    </div>
+    <div class="p-4 border-t border-gray-200">
+      <div class="flex justify-between mb-4">
+        <span class="font-semibold">Total:</span>
+        <span class="font-bold" id="cart-total">€0.00</span>
+      </div>
+      <button id="checkout-button" class="w-full py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors" disabled>
+        Realizar Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkout-modal">
+    <h2 class="text-xl font-bold mb-4">Finalizar Pedido</h2>
+    <form id="checkout-form">
+      <div class="order-type-toggle">
+        <div class="order-type-option active" data-type="pickup">Pickup</div>
+        <div class="order-type-option" data-type="delivery">Delivery</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="name">Nombre</label>
+        <input type="text" id="name" class="form-input" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="phone">Teléfono</label>
+        <input type="tel" id="phone" class="form-input" required>
+      </div>
+      
+      <div id="dine-in-fields">
+        <div class="form-group">
+          <label class="form-label" for="table-number">Número de Mesa</label>
+          <input type="number" id="table-number" class="form-input" min="1">
+        </div>
+      </div>
+      
+      <div id="delivery-fields" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="address">Dirección</label>
+          <textarea id="address" class="form-input" rows="3"></textarea>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="notes">Notas adicionales</label>
+        <textarea id="notes" class="form-input" rows="2" placeholder="Alergias, preferencias, etc."></textarea>
+      </div>
+      
+      <div class="flex justify-between mt-6">
+        <button type="button" id="cancel-checkout" class="px-4 py-2 border border-gray-300 rounded-lg">
+          Cancelar
+        </button>
+        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg">
+          Confirmar Pedido
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Order Confirmation Screen -->
+  <div class="confirmation-screen" id="confirmation-screen">
+    <div class="max-w-md mx-auto pt-10">
+      <div class="text-center mb-6">
+        <i class="fas fa-check-circle text-green-500 text-6xl"></i>
+        <h2 class="text-2xl font-bold mt-4">¡Pedido Confirmado!</h2>
+        <p class="text-gray-500 mt-2">Tu pedido ha sido recibido y está en preparación</p>
+      </div>
+      
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <h3 class="font-bold text-lg mb-2">Resumen del Pedido</h3>
+        <div id="confirmation-items" class="divide-y divide-gray-200 mb-4">
+          <!-- Order items will be listed here -->
+        </div>
+        <div class="flex justify-between font-bold">
+          <span>Total:</span>
+          <span id="confirmation-total">€0.00</span>
+        </div>
+      </div>
+      
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <h3 class="font-bold text-lg mb-2">Detalles</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="text-gray-500">Nombre:</div>
+          <div id="conf-name"></div>
+          
+          <div class="text-gray-500">Teléfono:</div>
+          <div id="conf-phone"></div>
+          
+          <div class="text-gray-500" id="conf-location-type">Mesa:</div>
+          <div id="conf-location"></div>
+          
+          <div class="text-gray-500">Tiempo estimado:</div>
+          <div>20-30 minutos</div>
+        </div>
+      </div>
+      
+      <button id="back-to-menu" class="w-full py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors">
+        Volver al Menú
+      </button>
+    </div>
+  </div>
+
+<script id="app-script">
+document.addEventListener('DOMContentLoaded', () => {
+  /* ========= Estado ========= */
+  let cart = [];
+  let currentCategory = 'burgers';
+  const orderTypeState = { type: 'pickup' };
+
+  /* ========= Datos ========= */
+  const menuData = {
+    burgers: [
+      { id:'b1', name:'CHEDDAR',
+        description:'Medallón 120grs de carne, queso cheddar, panceta ahumada, cebollita caramelizada. Acompañada con papas fritas.',
+        variants:[{name:'Simple',price:7000},{name:'Doble',price:9000},{name:'Triple',price:10500}],
+        image:'https://cdn.pixabay.com/photo/2020/03/21/11/17/burger-4953465_1280.jpg'
+      },
+      { id:'b2', name:'CRISPY BOOM',
+        description:'Medallón 120grs de carne, queso cheddar, panceta ahumada, cebollita crispy, salsa boom casera. Acompañada con papas fritas.',
+        variants:[{name:'Simple',price:7000},{name:'Doble',price:9000},{name:'Triple',price:10500}],
+        image:'https://cdn.pixabay.com/photo/2022/08/31/10/13/burger-7422970_1280.jpg'
+      },
+      { id:'b3', name:'CLÁSICAS',
+        description:'Medallón 120grs de carne, jamón y queso, lechuga, tomate. Acompañadas con papas fritas.',
+        variants:[{name:'Simple',price:7000},{name:'Doble',price:9000},{name:'Triple',price:10500}],
+        image:'https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_1280.jpg'
+      },
+      { id:'b4', name:'LA DIEGO FAVORITA',
+        description:'Medallón 120grs de carne, queso tybo, lechuga, tomate, cebolla encurtida, panceta ahumada, salsa EL DIEGO. Acompañadas con papas fritas.',
+        variants:[{name:'Simple',price:8000},{name:'Doble',price:9500},{name:'Triple',price:11500}],
+        image:'https://cdn.pixabay.com/photo/2019/01/16/17/48/burger-3936525_1280.jpg'
+      },
+      { id:'b5', name:'BAÑADAS EN CHEDDAR',
+        description:'Medallón 120grs de carne, jamón y queso, queso cheddar fundido y lluvia de panceta ahumada. Acompañado con papas fritas.',
+        variants:[{name:'Simple',price:8000},{name:'Doble',price:9500},{name:'Triple',price:11500}],
+        image:'https://cdn.pixabay.com/photo/2018/03/04/20/10/burger-3199088_1280.jpg'
+      },
+      { id:'b6', name:'LA EXPLOSIVA DEL DIEGO',
+        description:'Medallón 120grs de carne, queso cheddar fundido, cebolla caramelizada, panceta ahumada, mayonesa EL DIEGO. Acompañado con papas fritas.',
+        variants:[{name:'Simple',price:7000},{name:'Doble',price:9000},{name:'Triple',price:10500}],
+        image:'https://cdn.pixabay.com/photo/2022/01/03/00/14/burger-6911570_1280.jpg'
+      }
+    ],
+    sandwiches: [
+      { id:'s1', name:'MILANESA',
+        description:'Milanesa 300grs, jamón y queso, huevo, lechuga, tomate, acompañado con papas fritas.',
+        price:10500, image:'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+      },
+      { id:'s2', name:'LOMITO',
+        description:'Lomo 300grs, jamón y queso, huevo, lechuga, tomate, acompañado con papas fritas.',
+        price:11500, image:'https://cdn.pixabay.com/photo/2016/03/05/22/31/appetite-1239057_1280.jpg'
+      }
+    ],
+    fries: [
+      { id:'f1', name:'COMUNES',
+        description:'Bandeja de papas fritas, aderezos a elección.',
+        price:6500, image:'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+      },
+      { id:'f2', name:'CHEDDAR',
+        description:'Bandeja de papas fritas, cheddar fundido, cebolla de verdeo y lluvia de panceta.',
+        price:7000, image:'https://cdn.pixabay.com/photo/2021/03/04/08/36/croquettes-6067090_1280.jpg'
+      }
+    ],
+    nuggets: [
+      { id:'n1', name:'COMBO KIDS MINI',
+        description:'5 nuggets de pollo. Acompañados con papas fritas.',
+        price:4000, image:'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+      },
+      { id:'n2', name:'COMBO KIDS GRANDE',
+        description:'10 nuggets de pollo. Acompañados con papas fritas.',
+        price:6000, image:'https://cdn.pixabay.com/photo/2018/01/14/23/12/baked-potatoes-3082282_1280.jpg'
+      }
+    ],
+    beverages: {
+      sinAlcohol: [
+        { id:'ba1', name:'AGUA MINERAL',
+          description:'Botella de agua mineral',
+          variants:[{name:'1 Litro',price:7000},{name:'1,5 Litros',price:9000},{name:'2 Litros',price:10500}],
+          image:'https://cdn.pixabay.com/photo/2022/08/31/10/13/burger-7422970_1280.jpg'
+        },
+        { id:'ba2', name:'MIRINDA MANZANA',
+          description:'Pepsi, Seven Up, Mirinda Manzana',
+          price:3500, image:'https://cdn.pixabay.com/photo/2017/06/02/18/24/cola-2360834_1280.jpg'
+        },
+        { id:'ba3', name:'PEPSI',
+          description:'Pepsi, Seven Up, Mirinda Manzana',
+          price:2000, image:'https://cdn.pixabay.com/photo/2017/06/02/18/24/cola-2360834_1280.jpg'
+        },
+        { id:'ba4', name:'SEVEN UP',
+          description:'',
+          price:2000, image:'https://cdn.pixabay.com/photo/2016/03/05/19/02/water-1238246_1280.jpg'
+        }
+      ],
+      conAlcohol: [
+        { id:'al1', name:'Cerveza Quilmes 1L',
+          description:'Cerveza rubia tradicional argentina.',
+          price:3500, image:'https://cdn.pixabay.com/photo/2016/03/27/21/36/beer-1283566_1280.jpg'
+        },
+        { id:'al2', name:'Fernet con Coca',
+          description:'Trago clásico argentino, fernet con gaseosa cola.',
+          price:4000, image:'https://cdn.pixabay.com/photo/2017/07/28/14/28/drink-2549494_1280.jpg'
+        },
+        { id:'al3', name:'Vino Tinto 750ml',
+          description:'Vino tinto argentino, botella 750ml.',
+          price:4500, image:'https://cdn.pixabay.com/photo/2016/11/29/09/32/alcohol-1869656_1280.jpg'
+        }
+      ]
+    },
+    picadas: []
+  };
+
+  /* ========= Utilidades ========= */
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const money = n => `$${Number(n).toLocaleString('es-AR')}`;
+
+  /* ========= Elementos ========= */
+  const menuContainer         = $('#menu-container');
+  const categoryTabs          = $$('.tab');
+  const cartButton            = $('#cart-button');
+  const cartPanel             = $('#cart-panel');
+  const cartOverlay           = $('#cart-overlay');
+  const closeCartButton       = $('#close-cart');
+  const cartItemsContainer    = $('#cart-items');
+  const cartTotal             = $('#cart-total');
+  const checkoutButton        = $('#checkout-button');
+  const checkoutModal         = $('#checkout-modal');
+  const cancelCheckoutButton  = $('#cancel-checkout');
+  const checkoutForm          = $('#checkout-form');
+  const orderTypeOptions      = $$('.order-type-option');
+  const dineInFields          = $('#dine-in-fields');
+  const deliveryFields        = $('#delivery-fields');
+  const confirmationScreen    = $('#confirmation-screen');
+  const confirmationItems     = $('#confirmation-items');
+  const confirmationTotal     = $('#confirmation-total');
+  const confName              = $('#conf-name');
+  const confPhone             = $('#conf-phone');
+  const confLocationType      = $('#conf-location-type');
+  const confLocation          = $('#conf-location');
+  const backToMenuButton      = $('#back-to-menu');
+  const darkModeToggle        = $('#dark-mode-toggle');
+  const cartCountBadge        = $('.cart-count');
+
+  /* ========= Templates ========= */
+  const cardSimple = (item) => `
+  <img src="${item.image}" alt="${item.name}" class="menu-img">
+  <div class="menu-content">
+    <h3 class="menu-title">${item.name}</h3>
+    <p class="menu-desc">${item.description || ''}</p>
+
+    <textarea
+      class="item-observation observation"
+      rows="2"
+      placeholder="Añadir observaciones..."
+      data-id="${item.id}">
+    </textarea>
+
+    <div class="menu-row">
+      <span class="menu-price">${money(item.price)}</span>
+
+      <div class="menu-actions">
+        <div class="quantity-control">
+          <div class="quantity-btn" data-action="decrease" data-id="${item.id}">-</div>
+          <input type="number" class="quantity-input" value="1" min="1" data-id="${item.id}">
+          <div class="quantity-btn" data-action="increase" data-id="${item.id}">+</div>
+        </div>
+
+        <button class="add-to-cart" data-id="${item.id}">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+`;
+
+  const cardWithVariants = (item) => `
+  <img src="${item.image}" alt="${item.name}" class="menu-img">
+  <div class="menu-content">
+    <h3 class="menu-title">${item.name}</h3>
+    <p class="menu-desc">${item.description || ''}</p>
+
+    <div class="variant-selector" data-id="${item.id}">
+      ${item.variants.map((v,i) => `
+        <div class="variant-option ${i===0 ? 'is-active' : ''}"
+             data-variant="${v.name}" data-price="${v.price}">
+          <span class="variant-name">${v.name}</span>
+          <span class="variant-price">${money(v.price)}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <textarea
+      class="item-observation observation"
+      rows="2"
+      placeholder="Añadir observaciones..."
+      data-id="${item.id}"></textarea>
+
+    <div class="menu-row">
+      <span class="menu-price item-price" data-id="${item.id}">${money(item.variants[0].price)}</span>
+      <div class="menu-actions">
+        <div class="quantity-control">
+          <div class="quantity-btn" data-action="decrease" data-id="${item.id}">-</div>
+          <input type="number" class="quantity-input" value="1" min="1" data-id="${item.id}">
+          <div class="quantity-btn" data-action="increase" data-id="${item.id}">+</div>
+        </div>
+        <button class="add-to-cart" data-id="${item.id}" data-variant="${item.variants[0].name}">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+`;
+
+  const makeCard = (item) => {
+    const card = document.createElement('div');
+    card.className = 'menu-card slide-in';
+    card.innerHTML = item.variants ? cardWithVariants(item) : cardSimple(item);
+    return card;
+  };
+
+  /* ========= Render del menú ========= */
+  function loadMenuItems(category) {
+    menuContainer.innerHTML = '';
+    setTimeout(() => {
+      if (category === 'beverages') {
+        renderBeverages(menuData.beverages);
+      } else {
+        (menuData[category] || []).forEach(item => {
+          menuContainer.appendChild(makeCard(item));
+        });
+      }
+    }, 500);
+  }
+
+  function renderBeverages(bev) {
+    const block = (title, arr) => {
+      if (!arr || !arr.length) return;
+      const h2 = document.createElement('h2');
+      h2.className = 'col-span-full text-xl font-bold mb-2 text-center' + (title.includes('Alcohol') ? ' mt-6' : '');
+      h2.textContent = title;
+      menuContainer.appendChild(h2);
+      arr.forEach(item => menuContainer.appendChild(makeCard(item)));
+    };
+    block('Bebidas sin Alcohol', bev.sinAlcohol);
+    block('Bebidas con Alcohol', bev.conAlcohol);
+  }
+
+  /* ========= Carrito ========= */
+  function updateCartCount() {
+    const totalItems = cart.reduce((s, it) => s + it.quantity, 0);
+    if (cartCountBadge) cartCountBadge.textContent = totalItems;
+    if (checkoutButton) checkoutButton.disabled = totalItems === 0;
+
+    if (totalItems === 0 && cartItemsContainer) {
+      cartItemsContainer.innerHTML = `
+        <div class="empty-cart-message">
+          <i class="fas fa-shopping-basket text-4xl mb-4 text-gray-400"></i>
+          <p class="text-gray-500">Tu carrito está vacío</p>
+          <p class="text-sm text-gray-400 mt-2">Agrega algunos productos del menú</p>
+        </div>
+      `;
+    }
+  }
+
+  function renderCart() {
+    if (!cartItemsContainer) return;
+    if (cart.length === 0) { updateCartCount(); return; }
+
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(ci => {
+      const mi = findMenuItem(ci.id, ci.variant);
+      if (!mi) return;
+      const itemTotal = mi.price * ci.quantity;
+      total += itemTotal;
+
+      const el = document.createElement('div');
+      el.className = 'cart-item';
+      el.innerHTML = `
+        <div class="flex-1">
+          <h3 class="font-semibold">${mi.name}${ci.variant ? ` (${ci.variant})` : ''}</h3>
+          ${ci.observation ? `<p class="text-xs text-gray-500 mt-1 italic">Nota: ${ci.observation}</p>` : ''}
+          <div class="flex justify-between items-center mt-2">
+            <span class="text-sm text-gray-600 dark:text-gray-300">${money(mi.price)}</span>
+            <div class="flex items-center">
+              <button class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center cart-qty-btn"
+                data-action="decrease" data-id="${ci.id}" data-variant="${ci.variant || ''}">
+                <i class="fas fa-minus text-xs"></i>
+              </button>
+              <span class="mx-2 w-6 text-center">${ci.quantity}</span>
+              <button class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center cart-qty-btn"
+                data-action="increase" data-id="${ci.id}" data-variant="${ci.variant || ''}">
+                <i class="fas fa-plus text-xs"></i>
+              </button>
+              <button class="ml-3 text-gray-400 hover:text-red-500 remove-item"
+                data-id="${ci.id}" data-variant="${ci.variant || ''}">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      cartItemsContainer.appendChild(el);
+    });
+
+    if (cartTotal) cartTotal.textContent = money(total);
+    updateCartCount();
+  }
+
+  // Busca item por id y variante en cualquier categoría (incluye bebidas anidadas)
+  function findMenuItem(id, variant = null) {
+    const searchArray = (arr) => {
+      if (!Array.isArray(arr)) return null;
+      const base = arr.find(x => x.id === id);
+      if (!base) return null;
+      if (base.variants && variant) {
+        const v = base.variants.find(v => v.name === variant);
+        if (v) return { ...base, price: v.price };
+      }
+      return base.price ? { ...base, price: base.price } : { ...base, price: base.variants?.[0]?.price || 0 };
+    };
+
+    for (const key in menuData) {
+      const cat = menuData[key];
+      if (Array.isArray(cat)) {
+        const found = searchArray(cat);
+        if (found) return found;
+      } else if (cat && typeof cat === 'object') {
+        for (const sub in cat) {
+          const found = searchArray(cat[sub]);
+          if (found) return found;
+        }
+      }
+    }
+    return null;
+  }
+
+  function addToCart(id, quantity, sourceEl) {
+    const card = sourceEl.closest('.menu-card');
+    const addBtn = card?.querySelector(`.add-to-cart[data-id="${id}"]`);
+    const variant = addBtn?.dataset.variant || null;
+    const observation = card?.querySelector(`.item-observation[data-id="${id}"]`)?.value.trim() || '';
+
+    const existing = cart.find(i => i.id === id && i.variant === variant);
+    if (existing) {
+      existing.quantity += quantity;
+      if (observation) existing.observation = observation;
+    } else {
+      cart.push({ id, quantity, observation, variant });
+    }
+    saveCart(); renderCart();
+  }
+
+  function removeFromCart(id, variant = null) {
+    cart = cart.filter(i => !(i.id === id && (variant ? i.variant === variant : true)));
+    saveCart(); renderCart();
+  }
+
+  function updateCartItemQuantity(id, action, variant = null) {
+    const item = cart.find(i => i.id === id && (variant ? i.variant === variant : true));
+    if (!item) return;
+    if (action === 'increase') item.quantity += 1;
+    if (action === 'decrease') {
+      item.quantity -= 1;
+      if (item.quantity <= 0) return removeFromCart(id, variant);
+    }
+    saveCart(); renderCart();
+  }
+
+  const saveCart = () => localStorage.setItem('restaurant-cart', JSON.stringify(cart));
+  function loadCart() {
+    const saved = localStorage.getItem('restaurant-cart');
+    if (saved) { cart = JSON.parse(saved); renderCart(); }
+  }
+
+  /* ========= Eventos ========= */
+
+  // Cambiar categoría
+  categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      categoryTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentCategory = tab.dataset.category;
+      loadMenuItems(currentCategory);
+    });
+  });
+
+  // Delegado en el contenedor del menú
+  menuContainer.addEventListener('click', (e) => {
+    // Añadir al carrito
+    const addBtn = e.target.closest('.add-to-cart');
+    if (addBtn) {
+      const id = addBtn.dataset.id;
+      const input = addBtn.closest('.menu-card')?.querySelector(`.quantity-input[data-id="${id}"]`);
+      const qty = Math.max(1, parseInt(input?.value || '1', 10));
+      addToCart(id, qty, addBtn);
+      if (input) input.value = 1;
+
+      const feedback = document.createElement('div');
+      feedback.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50';
+      feedback.textContent = 'Producto añadido';
+      document.body.appendChild(feedback);
+      setTimeout(() => feedback.remove(), 2000);
+      return;
+    }
+
+    // Botones de cantidad (en card)
+    const qtyBtn = e.target.closest('.quantity-btn');
+    if (qtyBtn) {
+      const { action, id } = qtyBtn.dataset;
+      const input = menuContainer.querySelector(`.quantity-input[data-id="${id}"]`);
+      if (!input) return;
+      let val = Math.max(1, parseInt(input.value || '1', 10));
+      input.value = action === 'increase' ? val + 1 : Math.max(1, val - 1);
+      return;
+    }
+
+    // Selección de variante (hamburguesas / agua mineral / etc.)
+    const opt = e.target.closest('.variant-option');
+    if (opt) {
+      const selector = opt.closest('.variant-selector');
+      if (!selector) return;
+
+      $$('.variant-option', selector).forEach(o => o.classList.remove('bg-red-500','text-white'));
+      opt.classList.add('bg-red-500','text-white');
+
+      const itemId = selector.dataset.id;
+      const { variant, price } = opt.dataset;
+
+      const priceEl = $(`.item-price[data-id="${itemId}"]`, menuContainer);
+      if (priceEl) priceEl.textContent = money(parseInt(price,10));
+
+      const add = $(`.add-to-cart[data-id="${itemId}"]`, selector.closest('.menu-card'));
+      if (add) add.dataset.variant = variant;
+
+      return;
+    }
+  });
+
+  // Validación input cantidad
+  menuContainer.addEventListener('change', (e) => {
+    if (e.target.classList.contains('quantity-input')) {
+      const v = parseInt(e.target.value, 10);
+      e.target.value = isNaN(v) || v < 1 ? 1 : v;
+    }
+  });
+
+  // Panel carrito
+  cartButton?.addEventListener('click', () => {
+    cartPanel?.classList.add('open');
+    cartOverlay?.classList.add('show');
+  });
+  closeCartButton?.addEventListener('click', () => {
+    cartPanel?.classList.remove('open');
+    cartOverlay?.classList.remove('show');
+  });
+  cartOverlay?.addEventListener('click', () => {
+    cartPanel?.classList.remove('open');
+    cartOverlay?.classList.remove('show');
+  });
+
+  // Controles carrito
+  cartItemsContainer?.addEventListener('click', (e) => {
+    const rm = e.target.closest('.remove-item');
+    if (rm) { removeFromCart(rm.dataset.id, rm.dataset.variant || null); return; }
+
+    const qty = e.target.closest('.cart-qty-btn');
+    if (qty) {
+      const { action, id, variant } = qty.dataset;
+      updateCartItemQuantity(id, action, variant || null);
+    }
+  });
+
+  // Checkout
+  checkoutButton?.addEventListener('click', () => {
+    if (cart.length > 0) {
+      checkoutModal?.classList.add('open');
+      cartOverlay?.classList.add('show');
+    }
+  });
+  cancelCheckoutButton?.addEventListener('click', () => {
+    checkoutModal?.classList.remove('open');
+    cartOverlay?.classList.remove('show');
+  });
+
+  // Tipo de pedido
+  orderTypeOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      orderTypeOptions.forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      orderTypeState.type = opt.dataset.type;
+      if (orderTypeState.type === 'pickup') {
+        dineInFields.style.display = 'block';
+        deliveryFields.style.display = 'none';
+      } else {
+        dineInFields.style.display = 'none';
+        deliveryFields.style.display = 'block';
+      }
+    });
+  });
+
+  // Envío de formulario
+  checkoutForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name  = $('#name')?.value || '';
+    const phone = $('#phone')?.value || '';
+    let location;
+
+    if (orderTypeState.type === 'pickup') {
+      location = $('#table-number')?.value || '';
+      confLocationType.textContent = 'Pickup #:';
+    } else {
+      location = $('#address')?.value || '';
+      confLocationType.textContent = 'Dirección:';
+    }
+
+    confName.textContent  = name;
+    confPhone.textContent = phone;
+    confLocation.textContent = location;
+
+    // Detalle y total
+    confirmationItems.innerHTML = '';
+    let total = 0;
+    cart.forEach(ci => {
+      const mi = findMenuItem(ci.id, ci.variant);
+      if (!mi) return;
+      const itemTotal = mi.price * ci.quantity;
+      total += itemTotal;
+
+      const row = document.createElement('div');
+      row.className = 'py-2';
+      row.innerHTML = `
+        <div class="flex justify-between">
+          <span>${ci.quantity}x ${mi.name}${ci.variant ? ` (${ci.variant})` : ''}</span>
+          <span>${money(itemTotal)}</span>
+        </div>
+        ${ci.observation ? `<p class="text-xs text-gray-500 mt-1 italic">Nota: ${ci.observation}</p>` : ''}
+      `;
+      confirmationItems.appendChild(row);
+    });
+    confirmationTotal.textContent = money(total);
+
+    // Mostrar confirmación y limpiar
+    checkoutModal?.classList.remove('open');
+    cartOverlay?.classList.remove('show');
+    confirmationScreen?.classList.add('show');
+    cart = [];
+    saveCart();
+    updateCartCount();
+  });
+
+  // Volver al menú
+  backToMenuButton?.addEventListener('click', () => {
+    confirmationScreen?.classList.remove('show');
+    cartPanel?.classList.remove('open');
+  });
+
+  // Dark mode
+  darkModeToggle?.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const enabled = document.body.classList.contains('dark-mode');
+    darkModeToggle.innerHTML = enabled ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    localStorage.setItem('dark-mode', enabled ? 'enabled' : 'disabled');
+  });
+
+  /* ========= Init ========= */
+  (function init() {
+    if (localStorage.getItem('dark-mode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+      if (darkModeToggle) darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    loadMenuItems(currentCategory);
+    loadCart();
+  })();
+});
+</script>
+
+</html>

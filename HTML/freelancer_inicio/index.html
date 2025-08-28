@@ -3,59 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Diego Burgers// ...existing code...
-${item.variants.map(variant => `
-  <div class="variant-option mr-2 mb-2 px-3 py-1 border rounded-full cursor-pointer text-sm ${variant.name === 'Simple' ? 'bg-red-500 text-white' : ''}" 
-       data-variant="${variant.name}" 
-       data-price="${variant.price}">
-    ${variant.name} $${variant.price.toLocaleString('es-AR')}
-  </div>
-`).join('')}
-// ...existing code...// ...dentro de la función loadMenuItems...
-${item.variants.map(variant => `
-  <div class="variant-option mr-2 mb-2 px-3 py-1 border rounded-full cursor-pointer text-sm ${variant.name === 'Simple' ? 'bg-red-500 text-white' : ''}" 
-       data-variant="${variant.name}" 
-       data-price="${variant.price}">
-    ${variant.name} $${variant.price.toLocaleString('es-AR')}
-  </div>
-`).join('')}
-// ...resto del código... - Menú Digital</title>
+  <title>El Diego Burgers</title>
+  <link rel="preload" href="CSS/normalize.css" as="style">
+  <link rel="stylesheet" href="CSS/normalize.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="CSS/styles.css" as="style">
+  <link href="CSS/styles.css" rel="stylesheet">
   <style id="app-style">
-    :root {
-      --primary-color: #ff6b6b;
-      --secondary-color: #4ecdc4;
-      --text-color: #2d3436;
-      --bg-color: #f9f9f9;
-      --card-bg: #ffffff;
-      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+  
+  
     
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: all 0.3s ease;
-    }
     
-    body.dark-mode {
-      --bg-color: #2d3436;
-      --text-color: #f9f9f9;
-      --card-bg: #393e46;
-      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
     
-    .header {
-      background-color: var(--card-bg);
-      box-shadow: var(--card-shadow);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
+    
+  
     
     .category-tabs {
       overflow-x: auto;
@@ -690,12 +655,16 @@ ${item.variants.map(variant => `
   beverages: {
     sinAlcohol: [
       {
-        id: 'ba1',
-        name: 'AGUA MINERAL',
-        description: 'Pepsi, Seven Up, Mirinda Manzana',
-        price: 4000,
-        image: 'https://cdn.pixabay.com/photo/2017/06/02/18/24/cola-2360834_1280.jpg'
-      },
+      id: 'ba1',
+      name: 'AGUA MINERAL',
+      description: 'Botella dde agua mineral',
+      variants: [
+        { name: '1 Litro', price: 7000 },
+        { name: '1,5 Litros', price: 9000 },
+        { name: '2 Litros', price: 10500 }
+      ],
+      image: 'https://cdn.pixabay.com/photo/2022/08/31/10/13/burger-7422970_1280.jpg'
+    },
       {
         id: 'ba2',
         name: 'MIRINDA MANZANA',
